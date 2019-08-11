@@ -1,0 +1,44 @@
+<head>
+</head>
+<h1>Home Page</h1>
+<div style='width: 800px;'>
+  <div id="map" style='width: 800px; height: 400px;'></div>
+</div>
+<table class="table-striped" style="float:center;width: 90%;">
+<thead>
+<th>Region</th>
+<th>Country</th>
+<th>Item Type</th>
+<th>Sales Channel</th>
+<th>Order Priority</th>
+<th>Order Date</th>
+<th>Order ID</th>
+<th>Ship Date</th>
+<th>Units Sold</th>
+<th>Unit Price</th>
+<th>Unit Cost</th>
+<th>Total Revenue</th>
+<th>Total Cost</th>
+<th>Total Profit</th>
+</thead>
+<tbody>
+<% @orders.each do |order| %>
+<tr>
+<td><%= Region.find_by(id: order.region_id).name %></td>
+<td><%= Country.find_by(id: order.country_id).name%></td>
+<td><%= ItemType.find_by(id: order.item_type_id).name %></td>
+<td><%= SalesChannel.find_by(id: order.sales_channel_id).name%></td>
+<td><%= order.order_priority%></td>
+<td><%= time_ago_in_words(order.order_date.to_datetime) %></td>
+<td><%= order.order_id %></td>
+<td><%= time_ago_in_words(order.ship_date)%></td>
+<td><%= order.units_sold%></td>
+<td><%= order.unit_price%></td>
+<td><%= order.unit_cost%></td>
+<td><%= order.total_revenue%></td>
+<td><%= order.total_cost%></td>
+<td><%= order.total_profit %></td>
+</tr>
+<% end  %>
+</tbody>
+</table>
