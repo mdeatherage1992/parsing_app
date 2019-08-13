@@ -1,9 +1,7 @@
 <head>
 </head>
-<h1>Home Page</h1>
-<div style='width: 800px;'>
-  <div id="map" style='width: 800px; height: 400px;'></div>
-</div>
+<div>
+<center>
 <table class="table-striped" style="float:center;width: 90%;">
 <thead>
 <th>Region</th>
@@ -42,3 +40,6 @@
 <% end  %>
 </tbody>
 </table>
+<%= will_paginate @orders, previous_label: h("<"), next_label: h(">"), style:'position: relative; left: 400px; height:30px;' %>
+</center>
+</div>

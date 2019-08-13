@@ -13,9 +13,9 @@
 //= require rails-ujs
 //= require activestorage
 //= require turbolinks
+//= require gmaps/google
 //= require jquery
 //= require underscore
-//= require gmaps/google
 //= require dataTables/jquery.dataTables
 //= require bootstrap
 //= require_tree .

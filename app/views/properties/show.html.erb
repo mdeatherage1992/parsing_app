@@ -1,0 +1,106 @@
+<head>
+  <%= javascript_tag do %>
+    window.propertiesURL = '<%= j properties_url %>';
+     window.properties = <%= raw @feature %>;
+  <% end %>
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+    #map {
+      height: 400px;
+      width: 400px;
+    }
+    /* Optional: Makes the sample page fill the window. */
+    html, body {
+      height: 30%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <br>
+  <table class='table-striped'>
+  <thead>
+    <tr>
+    <th>MAPBLKLOT</th>
+    <th>BLKLOT</th>
+    <th>Block Number</th>
+    <th>Lot Number</th>
+    <th>From Street</th>
+    <th>To Street</th>
+    <th>Street</th>
+    <th>Street Type</th>
+    <th>Odd Or Even (O / E)</th>
+    <th>Google Maps Polygon</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= @props.mapblklot %></td>
+      <td><%= @props.blklot%></td>
+      <td><%= @props.block_num%></td>
+      <td><%= @props.lot_num%></td>
+      <td><%= @props.from_st%></td>
+      <td><%= @props.to_st%></td>
+      <td><%= @props.street%></td>
+      <td><%= @props.st_type%></td>
+      <td><%= @props.odd_even%></td>
+      <td><%= link_to "Polygon Data", property_path(@props.id)%></td>
+    </tr>
+  </tbody>
+  </table>
+  <%= link_to 'Back', properties_path, class:'btn btn-primary' %>
+  <br>
+  <div class="jumbotron">
+  <h3>Location</h3>
+  <div id="map"></div>
+  <%= content_tag "div", id: "properties", data: {url: properties_url} do %>
+  <% end %>
+  </div>
+<script>
+  var data = '<%= @feature %>'
+  var items = []
+  var coords =[]
+   x = data.split(', ')
+   x.forEach(function(x){
+     new_x = x.replace(/[^0-9\.]+/g, '');
+     items.push(new_x)
+   })
+   console.log(data)
+   filtered_items = []
+   items.filter(function(x){
+     if(x !== ""){
+      filtered_items.push(x)
+     }
+   })
+   console.log(filtered_items)
+   for (var i = 0; i < filtered_items.length; i += 2) {
+      var obj = {lat: parseFloat(filtered_items[i + 1]), lng: parseFloat(filtered_items[i]) }
+      coords.push(obj)
+   }
+  var song = parseFloat(coords[0]['lat'])
+  var bird = parseFloat(coords[0]['lng'])
+   function initMap() {
+     var map = new google.maps.Map(document.getElementById('map'), {
+       zoom: 17,
+       center: {lat: song, lng: bird},
+       mapTypeId:  google.maps.MapTypeId.Terrain
+     });
+
+     // Construct the polygon.
+     var bermudaTriangle = new google.maps.Polyline({
+       path: coords,
+       strokeColor: '#FF0000',
+       strokeOpacity: 0.8,
+       strokeWeight: 2,
+       fillColor: '#FF0000',
+       fillOpacity: 0.35
+     });
+     bermudaTriangle.setMap(map);
+   }
+</script>
+<script async
+src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
+</script>
+</body>

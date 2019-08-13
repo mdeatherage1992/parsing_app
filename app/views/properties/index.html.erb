@@ -1,69 +1,40 @@
-<head>
-  <style>
-    /* Always set the map height explicitly to define the size of the div
-     * element that contains the map. */
-    #map {
-      height: 100%;
-    }
-    /* Optional: Makes the sample page fill the window. */
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-  <script src="//cdn.rawgit.com/mahnunchik/markerclustererplus/master/dist/markerclusterer.min.js"></script>
-  <script src='//cdn.rawgit.com/printercu/google-maps-utility-library-v3-read-only/master/infobox/src/infobox_packed.js' type='text/javascript'></script> <!-- only if you need custom infoboxes -->
-    window.propertiesURL = '<%= j properties_url %>';
-     window.properties = <%= raw Property.limit(10).to_json %>;
-  <% end %>
-</head>
+<center>
 <body>
+  <br>
+  <table class='table-striped'>
+  <thead>
+    <tr>
+    <th>MAPBLKLOT</th>
+    <th>BLKLOT</th>
+    <th>Block Number</th>
+    <th>Lot Number</th>
+    <th>From Street</th>
+    <th>To Street</th>
+    <th>Street</th>
+    <th>St. Type</th>
+    <th>Odd/Even</th>
+    <th>Polygon</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @props.each do |prop|%>
+    <tr>
+      <td><%= prop.mapblklot %></td>
+      <td><%= prop.blklot%></td>
+      <td><%= prop.block_num%></td>
+      <td><%= prop.lot_num%></td>
+      <td><%= prop.from_st%></td>
+      <td><%= prop.to_st%></td>
+      <td><%= prop.street%></td>
+      <td><%= prop.st_type%></td>
+      <td><%= prop.odd_even%></td>
+      <td><%= link_to "Polygon Data", property_path(prop.id)%></td>
+    </tr>
+    <% end %>
+  </tbody>
+  </table>
+  <%= will_paginate @props, previous_label: h("<"), next_label: h(">"), style:'position: relative; left: 400px; height:30px;' %>
+  <%= content_tag "div", id: "properties", data: {url: properties_url} do %>
+  <% end %>
 </body>
-<script>
-var google;
-var map;
-function initMap(data) {
-var map = new google.maps.Map(document.getElementById('map'), {
-  zoom: 6,
-  center: {lat: -33.872, lng: 151.252},
-});
-
-// Define the LatLng coordinates for the outer path.
-var outerCoords = [
-  {lat: -32.364, lng: 153.207}, // north west
-  {lat: -35.364, lng: 153.207}, // south west
-  {lat: -35.364, lng: 158.207}, // south east
-  {lat: -32.364, lng: 158.207}  // north east
-];
-
-// Define the LatLng coordinates for an inner path.
-var innerCoords1 = [
-  {lat: -33.364, lng: 154.207},
-  {lat: -34.364, lng: 154.207},
-  {lat: -34.364, lng: 155.207},
-  {lat: -33.364, lng: 155.207}
-];
-
-// Define the LatLng coordinates for another inner path.
-var innerCoords2 = [
-  {lat: -33.364, lng: 156.207},
-  {lat: -34.364, lng: 156.207},
-  {lat: -34.364, lng: 157.207},
-  {lat: -33.364, lng: 157.207}
-];
-
-map.data.add({geometry: new google.maps.Data.Polygon([outerCoords,
-                                                      innerCoords1,
-                                                      innerCoords2])})
-                                                    }
-</script>
-<script async defer
-src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
-</script>
-<script>
-$(document).ready(function(){
-  var properties = $('#properties').data('url');
-  console.log(properties[0])
-})
-</script>
+</center>
